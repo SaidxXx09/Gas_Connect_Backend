@@ -1,0 +1,13 @@
+.gallery {
+    padding: 6rem 0;
+}
+.gallery-description {
+    color: var(--c6);
+    margin-bottom: 4rem;
+    font-size: 1.8rem;
+}
+.gallery-image {
+    width: 5%;
+    display: block;
+    margin: 0 auto;
+}
