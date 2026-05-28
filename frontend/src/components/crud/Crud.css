@@ -1,0 +1,48 @@
+.crud-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.crud-container h1 {
+    margin-bottom: 40px;
+    color: #004AAD; /* Azul de la landing page */
+    font-size: 2.5rem;
+}
+
+.crud-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 400px;
+    width: 100%;
+}
+
+.crud-button {
+    text-decoration: none;
+}
+
+.crud-button button {
+    width: 100%;
+    height: 120px;
+    font-size: 18px;
+    background-color: #FF8C00; /* Amarillo de la landing page */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 8px rgba(255, 140, 0, 0.3); /* Sombra amarilla */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.crud-button button:hover {
+    background-color: #FFA500;
+    box-shadow: 0 6px 12px rgba(255, 140, 0, 0.5);
+}
