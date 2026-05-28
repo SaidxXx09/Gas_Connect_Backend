@@ -341,11 +341,11 @@ FRONTEND_URL=http://localhost:5173
   <tr>
     <td align="center">
       <b>Autor 1</b><br/>
-      <sub>Rol / Área de contribución</sub>
+      <sub>Scrum Master / Said Quinto Nevarez</sub>
     </td>
     <td align="center">
       <b>Autor 2</b><br/>
-      <sub>Rol / Área de contribución</sub>
+      <sub>Developer / Marcos Antonio Araya Arpi</sub>
     </td>
   </tr>
 </table>
