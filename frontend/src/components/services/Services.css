@@ -1,0 +1,47 @@
+.services-section {
+    padding: 6rem 0;
+}
+.services-subtitle {
+    font-size: 1.8rem;
+    color: var(--c6);
+    margin-bottom: 4rem;
+    font-weight: 400;
+}
+.services-grid {
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.service-card {
+    background-color: #3B4B5C;
+    padding: 3rem;
+    border-radius: 1.5rem;
+    text-align: center;
+    border: 1px solid var(--c3);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform var(--transition);
+}
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(255, 140, 0, 0.3);
+}
+.card-icon img {
+    width: 8rem;
+    height: 8rem;
+    object-fit: contain;
+    margin-bottom: 2rem;
+    filter: drop-shadow(0 0 5px rgba(255, 140, 0, 0.5));
+}
+.card-title {
+    color: var(--c1);
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
+}
+.card-description {
+    color: var(--c6);
+    margin-bottom: 2.5rem;
+}

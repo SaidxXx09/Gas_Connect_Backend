@@ -1,0 +1,40 @@
+const express = require('express');
+const path = require('path');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const helmet = require('helmet');
+const connectDB = require('./config/db');
+
+dotenv.config({ path: path.resolve(__dirname, './.env') });
+
+const app = express();
+
+app.use(helmet()); 
+app.use(cors({
+  origin: [process.env.FRONTEND_URL, 'http://localhost:5173'],
+  credentials: true
+}));
+app.use(express.json());
+
+// Montar Rutas
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/orders', require('./routes/orderRoutes'));
+
+app.get('/', (req, res) => {
+    res.send('API REST de GasConnect ejecutándose correctamente...');
+});
+
+app.use((req, res) => {
+    res.status(404).json({ mensaje: 'Ruta no encontrada' });
+});
+
+const PORT = process.env.PORT || 3000;
+
+const startServer = async () => {
+    await connectDB();
+    app.listen(PORT, () => {
+        console.log(`Servidor de desarrollo activo en el puerto: ${PORT}`);
+    });
+};
+
+startServer();
