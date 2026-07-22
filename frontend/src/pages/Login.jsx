@@ -33,7 +33,7 @@ const Login = () => {
       }
 
       if (!emailConfirmed) {
-        toast.info('Tu cuenta aún no está confirmada. Ingresa el último código recibido por correo.');
+        toast.info('Tu cuenta aún no está confirmada. Recuerda ingresar el último código recibido por correo.');
         navigate('/confirm', { replace: true });
         return;
       }
@@ -137,7 +137,7 @@ const Login = () => {
             <div className="auth-visual-inner">
               <span className="auth-visual-badge">Servicio confiable y cercano</span>
               <img src={imagenLogin} alt="Sparky junto al camión de entregas GasConnect" className="login-side-image" />
-              <p className="auth-visual-copy">Tus pedidos, tu cuenta y la información del servicio en un solo lugar.</p>
+              <p className="auth-visual-copy">Tus pedidos, tu cuenta y la información en un solo lugar.</p>
             </div>
           </section>
         </div>

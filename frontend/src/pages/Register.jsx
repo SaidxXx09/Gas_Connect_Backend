@@ -61,7 +61,7 @@ const Register = () => {
                 <label htmlFor="register-name">Nombre completo</label>
                 <div className="input-shell">
                   <FiUser className="field-icon" />
-                  <input id="register-name" type="text" placeholder="Ej. Mateo Andrade" autoComplete="name" {...register('nombre', {
+                  <input id="register-name" type="text" placeholder="Ej. Said Quinto" autoComplete="name" {...register('nombre', {
                     required: 'El nombre es obligatorio',
                     minLength: { value: 3, message: 'El nombre debe tener al menos 3 caracteres' },
                     pattern: { value: /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]+$/, message: 'El nombre no puede contener números ni símbolos' },
