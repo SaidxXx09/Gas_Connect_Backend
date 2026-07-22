@@ -1,0 +1,119 @@
+.contact-section {
+    padding: 6rem 0;
+    overflow: hidden;
+}
+
+.contact-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.contact-form-container {
+    background-color: var(--c6);
+    padding: 3rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.input-animate {
+    padding: 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-family: var(--font-primary);
+    font-size: 1.6rem;
+    transition: all 0.3s ease;
+}
+
+.input-animate:focus {
+    border-color: var(--c2);
+    outline: none;
+    transform: translateX(5px);
+    box-shadow: -5px 0px 0px var(--c2);
+}
+
+.btn-animate {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-animate:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-animate:active {
+    transform: translateY(-1px);
+}
+
+.checkbox-label {
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+}
+
+.contact-map iframe {
+    width: 100%;
+    height: 40vh;
+    border-radius: 1rem;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.contact-map:hover iframe {
+    transform: scale(1.02);
+}
+
+.animate-fade-in-left {
+    animation: fadeInLeft 1s ease-out;
+}
+
+.animate-fade-in-right {
+    animation: fadeInRight 1s ease-out;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@media (min-width: 768px) {
+    .contact-grid {
+        flex-direction: row;
+        gap: 4rem;
+    }
+    .contact-form-container,
+    .contact-map {
+        flex: 1;
+    }
+    .contact-map iframe {
+        height: 100%;
+        min-height: 50vh;
+    }
+}

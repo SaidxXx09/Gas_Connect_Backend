@@ -1,0 +1,1038 @@
+{
+  "info": {
+    "_postman_id": "270df19d-b8ab-45b4-b099-c6b1d36358ea",
+    "name": "GasConnect Sprint 4 - API completa",
+    "description": "Autenticación, perfiles, pedidos, Cloudinary, chat, Groq y Kushki. Socket.IO se prueba desde el frontend o un cliente WebSocket compatible.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "loginEmail",
+      "value": "admin@gasconnect.com"
+    },
+    {
+      "key": "loginPassword",
+      "value": "CAMBIA_ESTA_CLAVE_ADMIN"
+    },
+    {
+      "key": "confirmationCode",
+      "value": ""
+    },
+    {
+      "key": "resetPin",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "driverId",
+      "value": ""
+    },
+    {
+      "key": "orderId",
+      "value": ""
+    },
+    {
+      "key": "kushkiToken",
+      "value": ""
+    },
+    {
+      "key": "ticketNumber",
+      "value": ""
+    },
+    {
+      "key": "webhookSecret",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Autenticación y usuarios",
+      "item": [
+        {
+          "name": "Registrar cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cliente Prueba\",\n  \"email\": \"cliente.gasconnect@example.com\",\n  \"password\": \"Clave123\",\n  \"role\": \"cliente\",\n  \"telefono\": \"0999999999\",\n  \"direccion\": \"Quito\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Registrar repartidor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Repartidor Prueba\",\n  \"email\": \"repartidor.gasconnect@example.com\",\n  \"password\": \"Clave123\",\n  \"role\": \"repartidor\",\n  \"telefono\": \"0988888888\",\n  \"direccion\": \"Quito\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Iniciar sesión",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{loginEmail}}\",\n  \"password\": \"{{loginPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.token) pm.collectionVariables.set('token', data.token);",
+                  "if (data._id) pm.collectionVariables.set('userId', data._id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Confirmar cuenta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/confirm",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"{{confirmationCode}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Reenviar confirmación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/resend-confirmation",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Olvidé contraseña",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/forgotpassword",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{loginEmail}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Restablecer contraseña",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/resetpassword",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pin\": \"{{resetPin}}\",\n  \"newPassword\": \"NuevaClave123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Ver perfil",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/auth/profile",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar perfil",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/profile",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Usuario GasConnect Actualizado\",\n  \"telefono\": \"0999999999\",\n  \"direccion\": \"Quito\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Cambiar contraseña",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/profile/password",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"{{loginPassword}}\",\n  \"newPassword\": \"NuevaClave123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Subir avatar Cloudinary",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": "{{baseUrl}}/auth/profile/avatar",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "avatar",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar usuarios (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/auth/users?role=repartidor",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear usuario (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/users",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Nuevo Repartidor\",\n  \"email\": \"nuevo.repartidor@example.com\",\n  \"password\": \"Clave123\",\n  \"role\": \"repartidor\",\n  \"telefono\": \"0977777777\",\n  \"direccion\": \"Quito\",\n  \"emailConfirmed\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Actualizar usuario (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/users/{{userId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"repartidor\",\n  \"activo\": true,\n  \"emailConfirmed\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Eliminar usuario (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/auth/users/{{userId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Pedidos y entregas",
+      "item": [
+        {
+          "name": "Crear pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/orders",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"direccionEntrega\": \"Av. 10 de Agosto y Colón\",\n  \"referenciaEntrega\": \"Edificio azul\",\n  \"cantidadCilindros\": 2,\n  \"latitud\": -0.180653,\n  \"longitud\": -78.467834\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.order?._id) pm.collectionVariables.set('orderId', data.order._id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar pedidos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/orders",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar pedidos pendientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/orders?estado=pendiente",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar pedidos cercanos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/orders/nearby?lat=-0.180653&lng=-78.467834&maxDistance=5000",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ver detalle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/orders/{{orderId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Editar pedido pendiente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/orders/{{orderId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"direccionEntrega\": \"Nueva dirección\",\n  \"referenciaEntrega\": \"Casa esquinera\",\n  \"cantidadCilindros\": 1,\n  \"latitud\": -0.19,\n  \"longitud\": -78.48\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Aceptar pedido (repartidor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/orders/{{orderId}}/accept",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Asignar repartidor (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/orders/{{orderId}}/assign",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"repartidorId\": \"{{driverId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Marcar en camino",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/orders/{{orderId}}/status",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"en camino\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Subir evidencia",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": "{{baseUrl}}/orders/{{orderId}}/proof",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "proof",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Marcar entregado",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/orders/{{orderId}}/status",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"entregado\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Actualizar ubicación REST",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/orders/{{orderId}}/location",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": -0.181,\n  \"lng\": -78.47\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Cancelar pedido",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/orders/{{orderId}}/cancel",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivo\": \"Cancelado desde Postman\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Chat e IA",
+      "item": [
+        {
+          "name": "Historial de mensajes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/realtime-chat/orders/{{orderId}}/messages",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Enviar mensaje REST",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/realtime-chat/orders/{{orderId}}/messages",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Mensaje de prueba desde Postman\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Marcar mensajes leídos",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/realtime-chat/orders/{{orderId}}/read",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Consultar Sparky Groq",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/chat",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"¿Cuál es el estado de mis pedidos?\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Pagos Kushki",
+      "item": [
+        {
+          "name": "Listar pagos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/payments",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cobrar pedido con token Kushki",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/payments/orders/{{orderId}}/charge",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"{{kushkiToken}}\",\n  \"contactDetails\": {\n    \"documentType\": \"CI\",\n    \"documentNumber\": \"1712345678\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Webhook Kushki base",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-gasconnect-webhook-secret",
+                "value": "{{webhookSecret}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/payments/webhook/kushki",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ticketNumber\": \"{{ticketNumber}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Diagnóstico",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/health"
+          }
+        }
+      ]
+    }
+  ]
+}

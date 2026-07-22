@@ -1,0 +1,72 @@
+.app-promo {
+    padding: 6rem 0;
+    background-color: var(--c6);
+}
+
+.app-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    align-items: center;
+}
+
+.app-phone-image {
+    max-width: 250px; 
+    height: auto;
+    border-radius: 2rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    animation: floatAnimation 4s ease-in-out infinite;
+}
+
+.app-content {
+    text-align: center;
+    width: 100%;
+}
+
+.app-description {
+    margin-bottom: 3rem;
+}
+
+.app-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.app-buttons a img {
+    height: 5rem;
+    width: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease, opacity var(--transition);
+}
+
+.app-buttons a img:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+@keyframes floatAnimation {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0); }
+}
+
+@media (min-width: 992px) {
+    .app-grid {
+        flex-direction: row;
+        gap: 8rem;
+        text-align: left;
+    }
+    .app-content {
+        flex: 1;
+    }
+    .app-phone-image {
+        order: -1;
+    }
+    .app-content {
+        text-align: left;
+    }
+    .app-buttons {
+        justify-content: flex-start;
+    }
+}
